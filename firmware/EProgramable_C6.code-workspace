@@ -23,6 +23,9 @@
         },
         {
             "path": "projects/proyecto1"
+        },
+        {
+            "path": "projects/conversor_a_BCD"
         }
     ],
     "settings": {
