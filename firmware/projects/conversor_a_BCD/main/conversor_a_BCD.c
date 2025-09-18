@@ -2,7 +2,7 @@
  *
  * @section genDesc General Description
  *
- * This section describes how the program works.
+ * This program recieves a 32 bit number, and its amount of decimal digits, and shows it on a BCD display
  *
  * <a href="https://drive.google.com/...">Operation Example</a>
  *
@@ -10,16 +10,24 @@
  *
  * |    Peripheral  |   ESP32   	|
  * |:--------------:|:--------------|
- * | 	PIN_X	 	| 	GPIO_X		|
+ * | 	   D1	 	| 	 GPIO_20	|
+ * |       D2       |    GPIO_21    |
+ * |       D3       |    GPIO_22    |
+ * |       D4       |    GPIO_23    |
+ * |      SEL_1     |    GPIO_19    |
+ * |      SEL_2     |    GPIO_18    |
+ * |      SEL_3     |     GPIO_9    |
+ * |      +5V       |      +5V      |
+ * |      GND       |      GND      |
  *
  *
  * @section changelog Changelog
  *
  * |   Date	    | Description                                    |
  * |:----------:|:-----------------------------------------------|
- * | 12/09/2023 | Document creation		                         |
+ * | 05/09/2025 | Document creation		                         |
  *
- * @author Albano Peñalva (albano.penalva@uner.edu.ar)
+ * @author Ernst, Ariel David (arielernst3@gmail.com)
  *
  */
 
@@ -35,6 +43,23 @@
 
 
 /*==================[macros and definitions]=================================*/
+
+/** @fn void convertToBcdArray(uint32_t data, uint8_t digits, uint8_t * bcd_number)
+ * @brief recibe el dato de 32 bits y lo guarda en un arreglo BCD con cada uno de sus dígitos
+ * @param[in] data el dato de 32 bits
+ * @param[in] digits el número de dpigitos que tiene el dato
+ * @param[in] bcd_number el arreglo BCD
+ * @return
+*/
+void  convertToBcdArray (uint32_t data, uint8_t digits, uint8_t * bcd_number);
+
+/** @fn void setBcdToGpio(uint8_t bcd, gpioConf_t *gpio_vector)
+ * @brief recibe un dígito BCD y un vector del tipo gpioConf_t, y configura este último para mostrar en el display el dígito bcd
+ * @param[in] bcd el dígito bcd
+ * @param[in] gpio_vector el vector gpioConf_t
+ * @return
+ */
+void setBcdToGpio(uint8_t bcd, gpioConf_t *gpio_vector);
 
 /*==================[internal data definition]===============================*/
 

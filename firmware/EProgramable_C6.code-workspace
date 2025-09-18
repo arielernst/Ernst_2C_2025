@@ -26,6 +26,9 @@
         },
         {
             "path": "projects/conversor_a_BCD"
+        },
+        {
+            "path": "projects/distance_measurement"
         }
     ],
     "settings": {
