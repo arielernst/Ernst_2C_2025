@@ -54,31 +54,34 @@ bool result = false;
 static void LedsBcdTask(void *pvParameter){
 	while(1){
 		uint16_t distance = HcSr04ReadDistanceInCentimeters();
-		if(measure == false){
+		
+		if(measure == false && result == false){
 			LedOff(LED_3);
 			LedOff(LED_2);
 			LedOff(LED_1);	
-		}else if (distance > 30){
+		}else if (distance > 30 && result == false){
 			LedOn(LED_1);
 			LedOn(LED_2);
 			LedOn(LED_3);
-		}else if (distance > 20){
+		}else if (distance > 20 && result == false){
 			LedOff(LED_3);
 			LedOn(LED_2);
 			LedOn(LED_1);
-		}else if(distance >10){
+		}else if(distance >10 && result == false){
 			LedOff(LED_3);
 			LedOff(LED_2);
 			LedOn(LED_1);
-		}else{
+		}else if (result==false){
 			LedOff(LED_3);
 			LedOff(LED_2);
 			LedOff(LED_1);			
 		}
 
 
-		if(measure){
+		if(measure && result==false){
 			LcdItsE0803Write(distance);
+		}else if(result){
+			;
 		}else{
 			LcdItsE0803Off();
 		}
