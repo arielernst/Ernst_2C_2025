@@ -33,6 +33,7 @@
 #include "hc_sr04.h"
 #include "lcditse0803.h"
 #include "switch.h"
+#include "timer_mcu.h"
 
 /*==================[macros and definitions]=================================*/
 
@@ -51,6 +52,7 @@ bool result = false;
 /*==================[internal functions declaration]=========================*/
 static void LedsBcdTask(void *pvParameter){
 	while(1){
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 		uint16_t distance = HcSr04ReadDistanceInCentimeters();
 		
 		if(measure == false && result == false){
@@ -88,6 +90,12 @@ static void LedsBcdTask(void *pvParameter){
 	}
 }
 
+
+void FuncTimer(void* param){
+	vTaskNotifyGiveFromISR(led_bcd_task_handle, pdFALSE);
+}
+
+
 void Switch1PressedFunction(void){
 	measure = ! measure;
 }
@@ -102,9 +110,18 @@ void app_main(void){
 	HcSr04Init(GPIO_3, GPIO_2);
 	LcdItsE0803Init();
 	SwitchesInit();
-    xTaskCreate(&LedsBcdTask, "LED", 512, NULL, 5, &led_bcd_task_handle);
+    timer_config_t timer_LedsBcdTask = {
+        .timer = TIMER_A,
+        .period = CONFIG_MEASURE_PERIOD,
+        .func_p = FuncTimer,
+        .param_p = NULL
+    };
+    TimerInit(&timer_LedsBcdTask);
+	xTaskCreate(&LedsBcdTask, "LED", 512, NULL, 5, &led_bcd_task_handle);
 	SwitchActivInt(SWITCH_1, Switch1PressedFunction, NULL);
 	SwitchActivInt(SWITCH_2, Switch2PressedFunction, NULL);
+
+	TimerStart(timer_LedsBcdTask.timer);
 
 }
 
